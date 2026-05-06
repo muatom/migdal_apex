@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Migdal APEX · Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy-deep: #0A1838;
+  --navy: #15275C;
+  --navy-mid: #1E3A8A;
+  --apex-blue: #2563EB;
+  --sky: #5DADE2;
+  --sky-light: #87CEEB;
+  --light-blue: #DBEAFE;
+  --pale: #F0F4FA;
+  --text-dark: #15275C;
+  --text-muted: #64748B;
+  --text-faint: #94A3B8;
+  --white: #FFFFFF;
+  --warning-bg: #FEF3C7;
+  --warning-border: #F59E0B;
+  --warning-text: #92400E;
+  --shadow-sm: 0 4px 12px rgba(21, 39, 92, 0.06);
+  --shadow: 0 10px 40px rgba(21, 39, 92, 0.08);
+  --shadow-strong: 0 20px 60px rgba(21, 39, 92, 0.15);
+  --shadow-deep: 0 30px 80px rgba(21, 39, 92, 0.25);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  font-family: 'Heebo', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(180deg, #F0F4FA 0%, #FFFFFF 40%, #E8F0FB 100%);
+  color: var(--text-dark);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ================ HERO ================ */
+.hero {
+  position: relative;
+  width: 100%;
+  background: linear-gradient(180deg, #FFFFFF 0%, #EAF2FB 100%);
+  overflow: hidden;
+  padding: 0;
+}
+
+.hero-banner {
+  display: block;
+  width: 100%;
+  max-width: 1900px;
+  margin: 0 auto;
+  aspect-ratio: 7 / 1;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.hero-banner-fallback {
+  display: none;
+  padding: 70px 60px 90px;
+  background: linear-gradient(135deg, #050D26 0%, #0A1838 35%, #15275C 70%, #1E3A8A 100%);
+  color: white;
+  text-align: center;
+}
+
+.hero-banner-fallback h1 {
+  font-size: 64px;
+  font-weight: 900;
+  letter-spacing: -2px;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #FFFFFF, #87CEEB);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-banner-fallback p { opacity: 0.85; font-size: 18px; }
+
+.hero img.hero-banner.broken { display: none; }
+.hero img.hero-banner.broken + .hero-banner-fallback { display: block; }
+
+/* ================ INTRO ================ */
+.intro {
+  max-width: 1500px;
+  margin: 14px auto 8px;
+  padding: 0 60px;
+  position: relative;
+  z-index: 5;
+}
+
+.intro-card {
+  background: white;
+  border-radius: 16px;
+  padding: 16px 24px;
+  box-shadow: var(--shadow);
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  border-right: 5px solid var(--apex-blue);
+}
+
+.intro-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #DBEAFE, #5DADE2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.intro-text h2 {
+  font-size: 19px;
+  margin-bottom: 4px;
+  color: var(--navy);
+  font-weight: 700;
+}
+
+.intro-text p {
+  color: var(--text-muted);
+  line-height: 1.65;
+  font-size: 14px;
+}
+
+/* ================ ROADMAP CANVAS ================ */
+.roadmap-section {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 8px 40px 0;
+}
+
+.roadmap-canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1600 / 640;
+  margin-bottom: 12px;
+}
+
+.roadmap-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.track-axis-label {
+  position: absolute;
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.4px;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--apex-blue) 100%);
+  padding: 14px 20px 14px 26px;
+  border-radius: 14px;
+  white-space: nowrap;
+  box-shadow: 0 12px 28px rgba(21, 39, 92, 0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+  z-index: 4;
+  text-align: center;
+}
+
+.track-axis-label::after {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  width: 14px;
+  height: 14px;
+  background: linear-gradient(135deg, var(--apex-blue), var(--apex-blue));
+  z-index: -1;
+}
+
+.track-axis-label.track-1-label {
+  top: 33.3%;
+  right: 1.5%;
+  transform: translateY(-50%);
+}
+
+.track-axis-label.track-2-label {
+  top: 69.4%;
+  right: 1.5%;
+  transform: translateY(-50%);
+}
+
+.track-axis-label small {
+  display: block;
+  font-size: 10.5px;
+  opacity: 0.85;
+  font-weight: 500;
+  margin-top: 3px;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* MILESTONE NODES */
+.milestone {
+  position: absolute;
+  transform: translate(50%, -50%);
+  cursor: pointer;
+  z-index: 3;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  animation: milestoneIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+.milestone:nth-child(4) { animation-delay: 0.05s; }
+.milestone:nth-child(5) { animation-delay: 0.15s; }
+.milestone:nth-child(6) { animation-delay: 0.25s; }
+.milestone:nth-child(7) { animation-delay: 0.1s; }
+.milestone:nth-child(8) { animation-delay: 0.2s; }
+.milestone-rt { animation-delay: 0.4s !important; }
+
+@keyframes milestoneIn {
+  from {
+    opacity: 0;
+    transform: translate(50%, -30%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(50%, -50%);
+  }
+}
+
+.milestone-stage {
+  position: absolute;
+  bottom: calc(100% + 22px);
+  right: 50%;
+  transform: translateX(50%);
+  white-space: nowrap;
+  font-size: 11px;
+  color: var(--navy);
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  background: white;
+  padding: 5px 12px;
+  border-radius: 999px;
+  box-shadow: var(--shadow-sm);
+}
+
+.milestone-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: white;
+  border: 4px solid var(--navy);
+  position: relative;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  display: block;
+}
+
+.milestone:hover .milestone-circle {
+  background: var(--navy);
+  transform: scale(1.15);
+  box-shadow: 0 0 0 6px rgba(21, 39, 92, 0.12);
+}
+
+.milestone.active .milestone-circle {
+  background: var(--apex-blue);
+  border-color: var(--apex-blue);
+  transform: scale(1.22);
+  box-shadow: 0 0 0 8px rgba(37, 99, 235, 0.18), 0 0 40px rgba(37, 99, 235, 0.4);
+}
+
+.milestone.active .milestone-circle::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: white;
+}
+
+.milestone-title {
+  position: absolute;
+  top: calc(100% + 22px);
+  right: 50%;
+  transform: translateX(50%);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy);
+  text-align: center;
+  width: 200px;
+  line-height: 1.35;
+  min-height: 38px;
+}
+
+.milestone-subtitle {
+  display: none;
+}
+
+.milestone-value {
+  position: absolute;
+  top: calc(100% + 22px);
+  right: 50%;
+  transform: translateX(50%);
+  margin-top: 50px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #065F46;
+  background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+  border: 1px solid #6EE7B7;
+  padding: 5px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.18);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.milestone-value::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.7);
+}
+
+.milestone-rt .milestone-value {
+  margin-top: 50px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(219, 234, 254, 0.95));
+  color: var(--navy);
+  border-color: rgba(93, 173, 226, 0.5);
+}
+
+.milestone-rt .milestone-value::before {
+  background: var(--apex-blue);
+  box-shadow: 0 0 6px rgba(37, 99, 235, 0.7);
+}
+
+/* Stage badges color variants */
+.milestone-stage.has-issue {
+  background: #FEF3C7;
+  color: var(--warning-text);
+  border: 1.5px solid var(--warning-border);
+}
+
+.milestone-stage.has-issue::before { content: '✱ '; }
+
+/* RT NODE - special */
+.milestone-rt .milestone-circle {
+  width: 96px;
+  height: 96px;
+  background: linear-gradient(135deg, #15275C, #2563EB);
+  border-color: #5DADE2;
+  border-width: 5px;
+  box-shadow: 0 0 0 10px rgba(93, 173, 226, 0.15), 0 20px 50px rgba(21, 39, 92, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rt-peak-icon {
+  width: 56%;
+  height: 56%;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 2px 8px rgba(255,255,255,0.3));
+}
+
+.milestone-rt .milestone-circle::before {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  border: 1px solid rgba(93, 173, 226, 0.3);
+  animation: pulse 3s infinite ease-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.95); opacity: 0.7; }
+  50% { transform: scale(1.08); opacity: 0.3; }
+  100% { transform: scale(0.95); opacity: 0.7; }
+}
+
+.milestone-rt:hover .milestone-circle {
+  transform: scale(1.05);
+}
+
+.milestone-rt.active .milestone-circle {
+  background: linear-gradient(135deg, #2563EB, #5DADE2);
+  transform: scale(1.08);
+}
+
+.milestone-rt.active .milestone-circle::after {
+  display: none;
+}
+
+.milestone-rt .milestone-stage {
+  background: var(--navy);
+  color: white;
+  border: none;
+  bottom: calc(100% + 28px);
+}
+
+.milestone-rt .milestone-title {
+  color: var(--navy);
+  font-size: 17px;
+  width: 240px;
+  top: calc(100% + 28px);
+}
+
+/* MERGE/CONVERGENCE INDICATOR */
+.merge-indicator {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #5DADE2, #2563EB);
+  transform: translate(50%, -50%);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15), 0 0 20px rgba(37, 99, 235, 0.6);
+  z-index: 2;
+}
+
+.merge-indicator::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 1px solid rgba(37, 99, 235, 0.25);
+  animation: mergePulse 2.5s infinite ease-out;
+}
+
+@keyframes mergePulse {
+  0% { transform: scale(0.85); opacity: 0.8; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+/* ================ DETAIL PANEL ================ */
+.detail-panel {
+  max-width: 1500px;
+  margin: 0 auto 30px;
+  padding: 0 60px;
+}
+
+.detail-card {
+  background: white;
+  border-radius: 22px;
+  padding: 32px 40px;
+  box-shadow: var(--shadow-strong);
+  min-height: 320px;
+  position: relative;
+  overflow: hidden;
+}
+
+.detail-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 100%;
+  background: linear-gradient(270deg, rgba(219, 234, 254, 0.4), transparent);
+  pointer-events: none;
+}
+
+.detail-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.detail-empty-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #DBEAFE, #5DADE2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+}
+
+.detail-empty h3 {
+  color: var(--navy);
+  font-size: 22px;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.detail-empty p {
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+.detail-content { display: none; position: relative; z-index: 2; }
+.detail-content.active { display: block; animation: fadeUp 0.4s ease; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.detail-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.detail-track-badge {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--navy), var(--apex-blue));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 22px;
+  flex-shrink: 0;
+  box-shadow: 0 8px 24px rgba(21, 39, 92, 0.25);
+}
+
+.detail-track-badge.track-2 {
+  background: linear-gradient(135deg, var(--apex-blue), var(--sky));
+}
+
+.detail-track-badge.rt {
+  background: linear-gradient(135deg, #050D26, #2563EB);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+}
+
+.detail-meta {
+  flex: 1;
+}
+
+.detail-stage-label {
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  color: var(--apex-blue);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.detail-meta h3 {
+  font-size: 28px;
+  color: var(--navy);
+  font-weight: 800;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
+}
+
+.detail-meta .detail-summary {
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.detail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.tag-value { background: #DCFCE7; color: #14532D; }
+.tag-warning { background: #FEF3C7; color: #92400E; }
+.tag-shared { background: #E0E7FF; color: #4338CA; }
+.tag-db { background: #DBEAFE; color: #1E3A8A; }
+.tag-foundation { background: #F3E8FF; color: #6B21A8; }
+
+.tag-warning::before { content: '✱ '; }
+
+.detail-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+.detail-section h5 {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.detail-section h5::before {
+  content: '';
+  width: 4px;
+  height: 14px;
+  background: var(--apex-blue);
+  border-radius: 2px;
+}
+
+.detail-section ul {
+  list-style: none;
+  padding-right: 0;
+}
+
+.detail-section ul li {
+  font-size: 14px;
+  color: #475569;
+  padding-right: 22px;
+  position: relative;
+  margin-bottom: 10px;
+  line-height: 1.65;
+}
+
+.detail-section ul li::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 9px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--apex-blue);
+  opacity: 0.5;
+}
+
+.open-issue {
+  background: linear-gradient(135deg, #FEF9E7, #FEF3C7);
+  border-right: 5px solid var(--warning-border);
+  border-radius: 12px;
+  padding: 18px 22px;
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--warning-text);
+  line-height: 1.65;
+  grid-column: span 2;
+}
+
+.open-issue::before {
+  content: '✱ סוגיה פתוחה';
+  display: block;
+  font-weight: 700;
+  margin-bottom: 8px;
+  font-size: 12px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.shared-block {
+  background: #EEF2FF;
+  border-right: 5px solid #6366F1;
+  border-radius: 12px;
+  padding: 16px 22px;
+  margin-top: 16px;
+  font-size: 14px;
+  color: #4338CA;
+  line-height: 1.65;
+  grid-column: span 2;
+}
+
+.shared-block::before {
+  content: '◇ רכיב משותף בין הצירים';
+  display: block;
+  font-weight: 700;
+  margin-bottom: 6px;
+  font-size: 12px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.split-hint {
+  background: linear-gradient(135deg, #F8FAFC, #F1F5F9);
+  border-right: 4px solid #94A3B8;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-top: 14px;
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.65;
+  grid-column: span 2;
+}
+
+.split-hint::before {
+  content: '⌗ תת-תכולה הניתנת לפיצול';
+  display: block;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 6px;
+  font-size: 11px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.split-hint strong {
+  color: var(--navy);
+  font-weight: 700;
+}
+
+/* VALUE HIGHLIGHT BLOCK */
+.value-highlight {
+  background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+  border-right: 5px solid #10B981;
+  border-radius: 14px;
+  padding: 18px 22px;
+  margin-bottom: 24px;
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  position: relative;
+  overflow: hidden;
+}
+
+.value-highlight::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 140px;
+  height: 100%;
+  background: radial-gradient(circle at left center, rgba(16, 185, 129, 0.15), transparent 70%);
+  pointer-events: none;
+}
+
+.value-highlight-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #10B981, #059669);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+  position: relative;
+  z-index: 1;
+}
+
+.value-highlight-content { flex: 1; position: relative; z-index: 1; }
+
+.value-highlight-content h6 {
+  font-size: 11px;
+  font-weight: 700;
+  color: #065F46;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  margin-bottom: 6px;
+}
+
+.value-highlight-content p {
+  font-size: 15px;
+  color: #064E3B;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.value-highlight-content ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 4px;
+}
+
+.value-highlight-content ul li {
+  font-size: 14px;
+  color: #065F46;
+  line-height: 1.6;
+  padding-right: 18px;
+  position: relative;
+  margin-bottom: 4px;
+}
+
+.value-highlight-content ul li::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 9px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10B981;
+}
+
+/* ================ FOOTER ================ */
+.footer {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 20px 60px 36px;
+  text-align: center;
+  color: var(--text-faint);
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  border-top: 1px solid #E5E7EB;
+}
+
+.footer .legend {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin: 16px 0 14px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.legend-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+}
+
+@media (max-width: 1200px) {
+  .roadmap-canvas {
+    aspect-ratio: auto;
+    height: 720px;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .roadmap-canvas-inner {
+    min-width: 1300px;
+    height: 720px;
+    position: relative;
+  }
+  .hero { padding: 50px 30px 70px; }
+  .hero-content { flex-direction: column; align-items: flex-start; }
+  .hero h1 { font-size: 56px; }
+  .hero-peak { width: 180px; height: 180px; }
+  .intro, .roadmap-section, .detail-panel, .footer { padding-left: 24px; padding-right: 24px; }
+  .detail-body { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ================== HERO ================== -->
+<section class="hero">
+  <img src="apex_hero.png" alt="Migdal APEX - Automated Policy Evaluation & eXecution. The new peak of automated underwriting" class="hero-banner" onerror="this.classList.add('broken')">
+  <div class="hero-banner-fallback">
+    <h1>Migdal APEX</h1>
+    <p>Automated Policy Evaluation &amp; eXecution · The new peak of automated underwriting</p>
+  </div>
+</section>
+
+<!-- ================== INTRO ================== -->
+<section class="intro">
+  <div class="intro-card">
+    <div class="intro-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+        <path d="M3 12 L9 12 L9 6 L15 6 L15 18 L21 18" stroke="#1E3A8A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="intro-text">
+      <h2>Roadmap, גישת MMF</h2>
+      <p>שני צירים מקבילים, אפס תלות פיתוח ביניהם, מתאחדים בנקודה אחת בלבד. כל ציר מביא ערך עצמאי ולומד מהמשתמשים. לחיצה על כל מיילסטון פותחת את התוכן המלא בפאנל למטה.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================== ROADMAP ================== -->
+<section class="roadmap-section">
+  <div class="roadmap-canvas">
+    <div class="roadmap-canvas-inner" style="position: relative; width: 100%; height: 100%;">
+
+      <!-- SVG: lines & curves -->
+      <svg class="roadmap-svg" viewBox="0 0 1600 720" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="lineGrad1" gradientUnits="userSpaceOnUse" x1="1320" y1="240" x2="560" y2="370">
+            <stop offset="0%" stop-color="#1E3A8A"/>
+            <stop offset="100%" stop-color="#2563EB"/>
+          </linearGradient>
+          <linearGradient id="lineGrad2" gradientUnits="userSpaceOnUse" x1="1320" y1="500" x2="560" y2="370">
+            <stop offset="0%" stop-color="#2563EB"/>
+            <stop offset="100%" stop-color="#5DADE2"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Track 1 dashed line (between milestones) - solid color for visibility -->
+        <line x1="1320" y1="240" x2="824" y2="240" stroke="#1E3A8A" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 12" opacity="0.85"/>
+        <!-- Track 1 solid curve to merge point -->
+        <path d="M 824 240 C 720 240, 640 300, 560 370" stroke="url(#lineGrad1)" stroke-width="7" fill="none" stroke-linecap="round"/>
+
+        <!-- Track 2 dashed line (between milestones) - solid color for visibility -->
+        <line x1="1320" y1="500" x2="824" y2="500" stroke="#2563EB" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 12" opacity="0.85"/>
+        <!-- Track 2 solid curve to merge point -->
+        <path d="M 824 500 C 720 500, 640 440, 560 370" stroke="url(#lineGrad2)" stroke-width="7" fill="none" stroke-linecap="round"/>
+
+        <!-- Merge to RT solid line - extend INTO the RT circle to ensure attachment -->
+        <line x1="560" y1="370" x2="270" y2="370" stroke="#15275C" stroke-width="7" stroke-linecap="round"/>
+      </svg>
+
+      <!-- Track axis labels (positioned at the right, before milestones, RTL reading start) -->
+      <div class="track-axis-label track-1-label">
+        ציר 1
+        <small>החיתום והחתם</small>
+      </div>
+      <div class="track-axis-label track-2-label">
+        ציר 2
+        <small>ייעול עבודת הרפרנט</small>
+      </div>
+
+      <!-- Track 1 milestones -->
+      <button class="milestone" data-id="t1p1" style="right: 17.5%; top: 33.3%;">
+        <span class="milestone-stage">שלב א</span>
+        <span class="milestone-circle"></span>
+        <span class="milestone-title">ממשק חתם</span>
+        <span class="milestone-subtitle">סריקה, סיכום, סינון, השוואה, CMC, Scout</span>
+        <span class="milestone-value">פריון חתם</span>
+      </button>
+
+      <button class="milestone" data-id="t1p2" style="right: 33%; top: 33.3%;">
+        <span class="milestone-stage">שלב ב</span>
+        <span class="milestone-circle"></span>
+        <span class="milestone-title">אוטומציה בליווי חתם</span>
+        <span class="milestone-subtitle">חיווי חוסרים, פניות אוטו, פקודות BPR</span>
+        <span class="milestone-value">פריון + תיקוף AI</span>
+      </button>
+
+      <button class="milestone" data-id="t1p3" style="right: 48.5%; top: 33.3%;">
+        <span class="milestone-stage">שלב ג</span>
+        <span class="milestone-circle"></span>
+        <span class="milestone-title">STP אמיתי עם ניתוב חכם</span>
+        <span class="milestone-subtitle">חוקת ניתוב, STP מלא</span>
+        <span class="milestone-value">צמצום חיתום אנושי</span>
+      </button>
+
+      <!-- Track 2 milestones -->
+      <button class="milestone" data-id="t2p1" style="right: 17.5%; top: 69.4%;">
+        <span class="milestone-stage">שלב א</span>
+        <span class="milestone-circle"></span>
+        <span class="milestone-title">הזנת הצהרה אוטומטית</span>
+        <span class="milestone-value">ייעול עבודת הרפרנט</span>
+      </button>
+
+      <button class="milestone" data-id="t2p2" style="right: 48.5%; top: 69.4%;">
+        <span class="milestone-stage">שלב ב</span>
+        <span class="milestone-circle"></span>
+        <span class="milestone-title">חוקת מחלות דינמית · BPR</span>
+        <span class="milestone-value">פחות חיתום מיותר</span>
+      </button>
+
+      <!-- Merge indicator (where curves meet) -->
+      <div class="merge-indicator" style="right: 65%; top: 51.4%;"></div>
+
+      <!-- RT (Convergence) milestone -->
+      <button class="milestone milestone-rt" data-id="rt" style="right: 82%; top: 51.4%;">
+        <span class="milestone-stage">CONVERGENCE</span>
+        <span class="milestone-circle">
+          <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" class="rt-peak-icon">
+            <path d="M 24 38 L 12 26 L 16 26 L 16 32 L 32 32 L 32 26 L 36 26 Z" fill="rgba(255,255,255,0.45)"/>
+            <path d="M 24 28 L 14 18 L 18 18 L 18 24 L 30 24 L 30 18 L 34 18 Z" fill="rgba(255,255,255,0.7)"/>
+            <path d="M 24 18 L 18 12 L 21 12 L 21 16 L 27 16 L 27 12 L 30 12 Z" fill="rgba(255,255,255,0.95)"/>
+            <circle cx="24" cy="9" r="2.5" fill="white"/>
+          </svg>
+        </span>
+        <span class="milestone-title">מערכת RT מקצה לקצה</span>
+        <span class="milestone-value">SLA תחרותי · RT לסוכן</span>
+      </button>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================== DETAIL PANEL ================== -->
+<section class="detail-panel">
+  <div class="detail-card">
+
+    <!-- Empty state -->
+    <div class="detail-empty" id="detailEmpty">
+      <div class="detail-empty-icon">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="9" stroke="#1E3A8A" stroke-width="2"/>
+          <path d="M12 8 L12 12 L15 14" stroke="#1E3A8A" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h3>בחר מיילסטון על הציר</h3>
+      <p>לחץ על אחת הנקודות שלמעלה כדי לראות מה כל שלב כולל, ערך עסקי וסוגיות פתוחות.</p>
+    </div>
+
+    <!-- T1 P1 -->
+    <div class="detail-content" data-id="t1p1">
+      <div class="detail-header">
+        <div class="detail-track-badge">1</div>
+        <div class="detail-meta">
+          <div class="detail-stage-label">ציר 1 · שלב א</div>
+          <h3>ממשק חתם</h3>
+          <p class="detail-summary">UI חדש לחתם עם סריקת מסמכים, סיכום, סינון, השוואה להצהרה, וגישה ל-CMC ול-Scout. כלי עזר. החתם עדיין מחליט ידנית.</p>
+          <div class="detail-tags">
+            <span class="tag tag-value">ערך מיידי</span>
+            <span class="tag tag-shared">משלב רכיב משותף</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="value-highlight">
+        <div class="value-highlight-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M3 17 L9 11 L13 15 L21 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 7 L21 7 L21 14" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="value-highlight-content">
+          <h6>ערך עסקי מרכזי</h6>
+          <ul>
+            <li>הגדלת פריון החתם, יותר תיקים ביום בלי תוספת כוח אדם</li>
+            <li>תיקוף והבשלת יכולות AI בסביבת ייצור, לפני שמסתמכים עליהן ב-STP</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="detail-body">
+        <div class="detail-section" style="grid-column: span 2;">
+          <h5>מה כולל</h5>
+          <ul>
+            <li>UI חתם חדש שמרכז את כל מסכי העבודה במקום אחד</li>
+            <li>השוואה אל מול הצהרת הבריאות</li>
+            <li>ממשק למחשבון CMC</li>
+            <li>ממשק צ'אט מול Scout</li>
+            <li>סריקת מסמכים רפואיים מ-Image, ניתוח ויצירת פרופיל לקוח רפואי, סיכום, סימון, סינון</li>
+            <li>בסיס למדידה: היום החתם מצופה ל-40 הפקות ביום, כאן מודדים את השיפור</li>
+          </ul>
+        </div>
+        <div class="shared-block">
+          רכיב חילוץ הצהרת הבריאות נצרך כאן כקלט להשוואה. אותו רכיב משרת גם את ציר 2 שלב א כפלט ל-BPR. נבנה פעם אחת (כולל OCR ו-Adapter על XML), נצרך פעמיים, אפס תלות בלוח זמנים.
+        </div>
+        <div class="split-hint">
+          <strong>פרופיל לקוח רפואי</strong> הוא רכיב סגור בפני עצמו. סריקת המסמכים הרפואיים מ-Image וניתוחם לכדי פרופיל מובנה הם תכולה שניתן להפריד לתת-שלב נפרד (א.2) ולשחרר בנפרד משאר הממשק, אם נדרש בשל מורכבות פיתוח או רצון לשחרור הדרגתי.
+        </div>
+      </div>
+    </div>
+
+    <!-- T1 P2 -->
+    <div class="detail-content" data-id="t1p2">
+      <div class="detail-header">
+        <div class="detail-track-badge">1</div>
+        <div class="detail-meta">
+          <div class="detail-stage-label">ציר 1 · שלב ב, תוספת</div>
+          <h3>אוטומציה בליווי חתם</h3>
+          <p class="detail-summary">המערכת מתחילה לעשות, החתם מאשר. חיווי חוסרים, פנייה אוטומטית למודלים, פקודות ל-BPR מהממשק.</p>
+          <div class="detail-tags">
+            <span class="tag tag-value">פריון פי 2</span>
+            <span class="tag tag-warning">תלות בתשתית BPR</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="value-highlight">
+        <div class="value-highlight-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M3 17 L9 11 L13 15 L21 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 7 L21 7 L21 14" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="value-highlight-content">
+          <h6>ערך עסקי מרכזי</h6>
+          <ul>
+            <li>קפיצה משמעותית בפריון החתם, החלטה בקליק במקום מעבר בין מערכות</li>
+            <li>הבשלת מנוע האוטומציה תחת פיקוח אנושי, התשתית ל-STP נבנית מתוך נתוני ייצור אמיתיים</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="detail-body">
+        <div class="detail-section" style="grid-column: span 2;">
+          <h5>מה מתווסף לשלב א</h5>
+          <ul>
+            <li>חיווי חוסרים אוטומטי, המערכת מסמנת מה חסר במסמכים</li>
+            <li>פנייה אוטומטית ל-CMC ולמודל Scout לפי הצורך, לא ידנית</li>
+            <li>ביצוע פקודות ל-BPR ישירות מהממשק: שליחת חוסרים, הפקה, סירוב</li>
+          </ul>
+        </div>
+        <div class="open-issue">
+          פקודות ל-BPR דורשות שה-API של BPR יודע לקבל פקודות אלה. אם זה לא קיים, נדרש פיתוח תשתית מצד BPR שאינו ייחוס לאף שלב כיום. כדאי לבדוק עם הצוות הטכני של BPR לפני התחלת השלב.
+        </div>
+      </div>
+    </div>
+
+    <!-- T1 P3 -->
+    <div class="detail-content" data-id="t1p3">
+      <div class="detail-header">
+        <div class="detail-track-badge">1</div>
+        <div class="detail-meta">
+          <div class="detail-stage-label">ציר 1 · שלב ג, תוספת</div>
+          <h3>STP אמיתי עם ניתוב חכם</h3>
+          <p class="detail-summary">המערכת מנתבת לבד. החתם רואה רק תיקים שדורשים שיקול דעת. שכבה עסקית עם DB ניתוב נפרד ו-UI לאנשי העסק.</p>
+          <div class="detail-tags">
+            <span class="tag tag-value">STP אמיתי</span>
+            <span class="tag tag-db">DB ניתוב נפרד</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="value-highlight">
+        <div class="value-highlight-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M3 17 L9 11 L13 15 L21 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 7 L21 7 L21 14" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="value-highlight-content">
+          <h6>ערך עסקי מרכזי</h6>
+          <ul>
+            <li>צמצום אחוז התיקים שעוברים אצל חתם אנושי, הקפיצה הכי משמעותית בציר</li>
+            <li>היום 100% מהחיתומים נעשים ע"י חתמים, ו-50% מסך הפוליסות. שלב ג הוא הראשון שמוריד את המספרים האלה</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="detail-body">
+        <div class="detail-section" style="grid-column: span 2;">
+          <h5>מה מתווסף</h5>
+          <ul>
+            <li>שליחת דרישת חוסרים אוטומטית, ללא צורך בקליק חתם</li>
+            <li>שכבה עסקית לניתוב STP, מבוססת על תוצאת חיתום מצרפית</li>
+            <li>DB נפרד לחוקת ניתוב STP (שונה מ-DB מחלות בציר 2)</li>
+            <li>UI לאנשי העסק לקנפג לוגיקות ניתוב, ללא תלות בפיתוח</li>
+            <li>יעד מצרפי לציר: 50% STP בתום שנה</li>
+          </ul>
+        </div>
+        <div class="detail-section" style="grid-column: span 2;">
+          <h5>החלטה ארכיטקטונית, חוקות נפרדות</h5>
+          <ul>
+            <li>DB ניתוב STP נפרד מ-DB מחלות, אפס תלות פיתוח בין הצירים</li>
+            <li>בעתיד אפשר לאחד UI שמדבר עם שני ה-DBs, אבל לא קריטי, מקסימום עורכים ישירות ב-DB</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- T2 P1, NEW: הזנת הצהרה אוטומטית -->
+    <div class="detail-content" data-id="t2p1">
+      <div class="detail-header">
+        <div class="detail-track-badge track-2">2</div>
+        <div class="detail-meta">
+          <div class="detail-stage-label">ציר 2 · שלב א</div>
+          <h3>הזנת הצהרה אוטומטית</h3>
+          <p class="detail-summary">חילוץ נתוני הצהרת הבריאות והזנה אוטומטית ל-API של BPR. כאן עבודת הרפרנט מתייעלת משמעותית בנתיב הסטנדרטי של מכירות Online, חלק מהמשימות הידניות החזרתיות מבוצעות אוטומטית.</p>
+          <div class="detail-tags">
+            <span class="tag tag-value">ייעול עבודת רפרנט</span>
+            <span class="tag tag-shared">משלב רכיב משותף</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="value-highlight">
+        <div class="value-highlight-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M3 17 L9 11 L13 15 L21 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 7 L21 7 L21 14" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="value-highlight-content">
+          <h6>ערך עסקי מרכזי</h6>
+          <ul>
+            <li>ייעול משמעותי של עבודת הרפרנט, שמטפלת היום ב-100% מההפקות. הזנה ידנית חזרתית מבוצעת אוטומטית, הרפרנט מתפנה למשימות בעלות ערך מוסף</li>
+            <li>ירידה משמעותית ב-SLA וצמצום העלות התפעולית של נתיב מכירות Online</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="detail-body">
+        <div class="detail-section" style="grid-column: span 2;">
+          <h5>מה כולל</h5>
+          <ul>
+            <li>חילוץ כל השדות הרלוונטיים מההצהרה: BMI, מחלות, עישון וכו</li>
+            <li>Adapter שקורא ההצהרה מ-XML של Glaxon עבור מכירות Online (הנתיב הסטנדרטי)</li>
+            <li>OCR + LLM Extraction עבור הצהרות היסטוריות שמגיעות במסמכים רפואיים סרוקים מ-Image</li>
+            <li>הזנה אוטומטית ל-API של BPR. BPR ממשיך להשתמש בלוגיקה הקיימת, עד שתשתפר בשלב ב</li>
+          </ul>
+        </div>
+        <div class="shared-block">
+          רכיב חילוץ ההצהרה נבנה פעם אחת ומשרת גם את ציר 1 שלב א (השוואה למסמכים, OCR על Image) וגם את השלב הזה (הזנה ל-BPR). פיתוח חד-פעמי, שני שימושים, אפס תלות בלוח זמנים.
+        </div>
+      </div>
+    </div>
+
+    <!-- T2 P2, NEW: חוקת מחלות דינמית -->
+    <div class="detail-content" data-id="t2p2">
+      <div class="detail-header">
+        <div class="detail-track-badge track-2">2</div>
+        <div class="detail-meta">
+          <div class="detail-stage-label">ציר 2 · שלב ב, תוספת</div>
+          <h3>חוקת מחלות דינמית · BPR</h3>
+          <p class="detail-summary">ביטול הקופסה השחורה הקיימת היום ב-BPR. DB מחלות עם UI לעריכה, BPR קורא לחוקה לפני החלטה. משלים את שלב א, פוליסות זורמות אוטומטית דרך חוקה ברורה.</p>
+          <div class="detail-tags">
+            <span class="tag tag-value">צמצום חיתום מיותר</span>
+            <span class="tag tag-foundation">תשתית עסקית</span>
+            <span class="tag tag-db">DB מחלות</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="value-highlight">
+        <div class="value-highlight-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M3 17 L9 11 L13 15 L21 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 7 L21 7 L21 14" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="value-highlight-content">
+          <h6>ערך עסקי מרכזי</h6>
+          <ul>
+            <li>צמצום שיעור הפוליסות שמגיעות לחיתום שלא לצורך</li>
+            <li>היום הלוגיקה ב-BPR אטומה, אנשי העסק לא רואים אותה ולא יכולים לכוון. חוקה דינמית פותחת את הקופסה השחורה ומאפשרת ניתוב חכם יותר</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="detail-body">
+        <div class="detail-section" style="grid-column: span 2;">
+          <h5>מה מתווסף</h5>
+          <ul>
+            <li>DB מחלות עם לוגיקות החלטה לכל מחלה</li>
+            <li>UI לאנשי העסק לעריכת חוקת המחלות, ללא תלות בפיתוח</li>
+            <li>אינטגרציה ל-BPR שיקרא לחוקה לפני החלטה אם להעביר לחיתום</li>
+            <li>בדומה לחיטומטר הקיים, אבל דינמי וניתן לעריכה ע"י העסק</li>
+            <li>מדידה: כמה שינויי לוגיקה אנשי העסק עושים בעצמם בלי לפנות לפיתוח, ואחוז התיקים שעוברים אוטומטית בעקבות החוקה החדשה</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- RT -->
+    <div class="detail-content" data-id="rt">
+      <div class="detail-header">
+        <div class="detail-track-badge rt">◆</div>
+        <div class="detail-meta">
+          <div class="detail-stage-label">Convergence Point</div>
+          <h3>מערכת RT מקצה לקצה</h3>
+          <p class="detail-summary">הנקודה היחידה שבה הצירים מתאחדים. כשהשני צירים בשלים, המערכת הופכת ל-Real-Time וזורמת לסוכן ולמועמד תוך כדי תהליך הרכישה. זו הפסגה. ה-APEX.</p>
+          <div class="detail-tags">
+            <span class="tag tag-value">פריצת SLA</span>
+            <span class="tag tag-foundation">פאזה אחרונה</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="value-highlight">
+        <div class="value-highlight-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M3 17 L9 11 L13 15 L21 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 7 L21 7 L21 14" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="value-highlight-content">
+          <h6>ערך עסקי מרכזי</h6>
+          <ul>
+            <li>כל הערכים של שני הצירים, חיים בזמן אמת מול הסוכן והמועמד</li>
+            <li>SLA כיתרון תחרותי מול הראל, סגירת פער ההמתנה שמסיט סוכנים מאיתנו היום</li>
+            <li>פתרון 34% מפניות הסוכנים שהן בקשות סטטוס</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="detail-body">
+        <div class="detail-section" style="grid-column: span 2;">
+          <h5>שלושת הזרמים של RT</h5>
+          <ul>
+            <li>חיווי חוסרים בזמן אמת בממשק מכירות Online, בלי לעצור את הסוכן</li>
+            <li>מחיר אחרי STP מופיע למועמד עוד בתהליך הרכישה</li>
+            <li>סטטוס תיק שעבר לחיתום אנושי, מתעדכן RT אצל הסוכן</li>
+          </ul>
+        </div>
+        <div class="detail-section" style="grid-column: span 2;">
+          <h5>תנאים לכניסה לפאזה</h5>
+          <ul>
+            <li>ציר 1 שלב ג בייצור: STP אמיתי, חוקת ניתוב פעילה</li>
+            <li>ציר 2 שלב ב בייצור: חוקת מחלות פעילה, ניתוב BPR משופר</li>
+            <li>אישורי DPO/יועמ"ש לכל המסלול האוטומטי</li>
+            <li>תוכנית Rollback מוכנה</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================== FOOTER ================== -->
+<div class="footer">
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:#DCFCE7;"></span>ערך עסקי</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#E0E7FF;"></span>רכיב משותף</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#DBEAFE;"></span>DB</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#F3E8FF;"></span>תשתית</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#FEF3C7;"></span>סוגיה פתוחה</div>
+  </div>
+  <div>Migdal APEX · Roadmap MMF · גרסה ראשונה · מאי 2026</div>
+</div>
+
+<script>
+const milestones = document.querySelectorAll('.milestone');
+const detailEmpty = document.getElementById('detailEmpty');
+const detailContents = document.querySelectorAll('.detail-content');
+
+milestones.forEach(milestone => {
+  milestone.addEventListener('click', () => {
+    const id = milestone.getAttribute('data-id');
+
+    // toggle active state on milestones
+    milestones.forEach(m => m.classList.remove('active'));
+    milestone.classList.add('active');
+
+    // hide empty state
+    detailEmpty.style.display = 'none';
+
+    // show only the selected detail content
+    detailContents.forEach(content => {
+      if (content.getAttribute('data-id') === id) {
+        content.classList.add('active');
+      } else {
+        content.classList.remove('active');
+      }
+    });
+
+    // smooth scroll to detail panel
+    document.querySelector('.detail-panel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+});
+</script>
+
+</body>
+</html>
