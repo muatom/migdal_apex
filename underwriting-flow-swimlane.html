@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Underwriting Flow — Swimlane</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f1f5f9;
+  --user-lane: #eff6ff;
+  --system-lane: #f5f3ff;
+  --user-accent: #2563eb;
+  --system-accent: #7c3aed;
+  --green: #16a34a;
+  --green-bg: #dcfce7;
+  --amber: #d97706;
+  --amber-bg: #fef3c7;
+  --red: #dc2626;
+  --red-bg: #fee2e2;
+  --cyan: #0891b2;
+  --cyan-bg: #cffafe;
+  --pink: #be185d;
+  --pink-bg: #fce7f3;
+  --gray-200: #e2e8f0;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-700: #334155;
+  --gray-900: #0f172a;
+  --card-shadow: 0 1px 8px rgba(0,0,0,0.07);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Heebo', sans-serif;
+  background: var(--bg);
+  color: var(--gray-900);
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, #1e293b, #334155);
+  color: white;
+  text-align: center;
+  padding: 28px 20px 24px;
+}
+.header h1 { font-size: 26px; font-weight: 800; }
+.header p { font-size: 13px; opacity: 0.6; margin-top: 4px; }
+
+/* Swimlane container */
+.swimlane {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 16px 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+}
+
+/* Lane headers */
+.lane-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding: 14px 20px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  border-bottom: 3px solid;
+  backdrop-filter: blur(10px);
+}
+.lane-header.user {
+  background: rgba(239,246,255,0.92);
+  color: var(--user-accent);
+  border-color: var(--user-accent);
+}
+.lane-header.system {
+  background: rgba(245,243,255,0.92);
+  color: var(--system-accent);
+  border-color: var(--system-accent);
+}
+.lane-header small {
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+/* Lane columns */
+.lane {
+  min-height: 100px;
+  padding: 16px 12px;
+  position: relative;
+}
+.lane.user-lane { background: var(--user-lane); }
+.lane.system-lane { background: var(--system-lane); }
+
+/* Row wrapper */
+.flow-row {
+  display: contents;
+}
+
+/* Vertical connector inside a lane */
+.v-connector {
+  display: flex;
+  justify-content: center;
+  padding: 4px 0;
+}
+.v-connector svg { width: 20px; height: 28px; }
+
+/* Node card */
+.node {
+  background: white;
+  border-radius: 12px;
+  border: 2px solid var(--gray-200);
+  box-shadow: var(--card-shadow);
+  margin: 0 4px;
+  cursor: pointer;
+  transition: all 0.25s;
+  overflow: hidden;
+}
+.node:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+}
+.node.active {
+  border-color: var(--user-accent);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+}
+.node.system-node.active {
+  border-color: var(--system-accent);
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.12);
+}
+
+.node-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  position: relative;
+}
+.node-head::after {
+  content: '';
+  position: absolute;
+  left: 14px;
+  width: 16px;
+  height: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+  background-size: contain;
+  transition: transform 0.2s;
+}
+.node.active .node-head::after { transform: rotate(180deg); }
+
+.node-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  color: white;
+  flex-shrink: 0;
+}
+.node-info h3 { font-size: 14px; font-weight: 700; line-height: 1.3; }
+.node-info .sub { font-size: 11.5px; color: var(--gray-500); margin-top: 1px; }
+
+.node-detail {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+.node.active .node-detail { max-height: 1500px; }
+
+.detail-inner {
+  padding: 0 14px 14px;
+  border-top: 1px solid var(--gray-200);
+}
+.detail-section { margin-top: 10px; }
+.detail-section h4 {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.func-item {
+  display: flex;
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid #f1f5f9;
+  align-items: flex-start;
+}
+.func-item:last-child { border-bottom: none; }
+.func-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+.func-item .text {
+  font-size: 12.5px;
+  color: var(--gray-700);
+  line-height: 1.5;
+}
+.func-item .text strong { color: var(--gray-900); }
+
+/* Cross-lane arrow */
+.cross-arrow {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 0;
+  position: relative;
+}
+.cross-arrow .arrow-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 16px;
+  background: white;
+  border: 1px dashed var(--gray-400);
+  border-radius: 20px;
+  font-size: 11px;
+  color: var(--gray-500);
+  font-weight: 500;
+}
+.cross-arrow .arrow-line svg {
+  width: 16px; height: 16px; flex-shrink: 0;
+}
+.cross-arrow.to-system .arrow-line { border-color: var(--system-accent); color: var(--system-accent); }
+.cross-arrow.to-user .arrow-line { border-color: var(--user-accent); color: var(--user-accent); }
+.cross-arrow.to-green .arrow-line { border-color: var(--green); color: var(--green); }
+.cross-arrow.to-amber .arrow-line { border-color: var(--amber); color: var(--amber); }
+.cross-arrow.to-red .arrow-line { border-color: var(--red); color: var(--red); }
+
+/* Empty cell placeholder */
+.empty-cell {
+  padding: 12px;
+}
+
+/* Scenario mini */
+.scenario-mini {
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  border: 1px solid;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.scenario-mini strong {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+.scenario-mini .num {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: white;
+  flex-shrink: 0;
+}
+
+/* Highlight box */
+.hl-box {
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: 10px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* Split outputs */
+.output-row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, var(--system-lane), var(--user-lane));
+}
+.output-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  border: 2px solid var(--gray-200);
+  box-shadow: var(--card-shadow);
+  cursor: pointer;
+  transition: all 0.2s;
+  overflow: hidden;
+}
+.output-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+.output-card.active { border-color: var(--user-accent); }
+.output-card .o-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  margin: 0 auto 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+  color: white;
+}
+.output-card h3 { font-size: 14px; font-weight: 700; }
+.output-card .o-sub { font-size: 11px; color: var(--gray-500); margin: 2px 0 8px; }
+.output-card .o-detail {
+  max-height: 0; overflow: hidden; transition: max-height 0.3s; text-align: right;
+}
+.output-card.active .o-detail { max-height: 400px; }
+.output-card .o-detail ul {
+  list-style: none; border-top: 1px solid var(--gray-200); padding-top: 8px;
+}
+.output-card .o-detail li {
+  font-size: 12px; padding: 3px 0; color: var(--gray-700);
+  padding-right: 12px; position: relative;
+}
+.output-card .o-detail li::before {
+  content: ''; position: absolute; right: 0; top: 9px;
+  width: 5px; height: 5px; border-radius: 50%;
+}
+
+/* Dev badge */
+.dev-badge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--system-accent);
+  color: white;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+/* Section divider */
+.section-divider {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 6px 0;
+}
+.section-divider span {
+  font-size: 10px;
+  color: var(--gray-400);
+  background: var(--bg);
+  padding: 2px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--gray-200);
+}
+
+@media (max-width: 640px) {
+  .swimlane { max-width: 100%; }
+  .node-info h3 { font-size: 13px; }
+  .output-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Underwriting Flow — Swimlane</h1>
+  <p>תהליך חיתום אוטומטי — צד משתמש מול צד מערכת</p>
+</div>
+
+<div class="swimlane">
+
+  <!-- Lane Headers -->
+  <div class="lane-header user">
+    סוכן / לקוח
+    <small>User — ממשק מכירות אונליין</small>
+  </div>
+  <div class="lane-header system">
+    מערכת — Procise
+    <small>System — רכיבים לפיתוח</small>
+  </div>
+
+  <!-- ======== ROW 1: Entry ======== -->
+  <div class="lane user-lane">
+    <div class="node" onclick="toggle(this)">
+      <div class="node-head">
+        <div class="node-icon" style="background:linear-gradient(135deg,#2563eb,#3b82f6);">IN</div>
+        <div class="node-info">
+          <h3>כניסה + הזנת נתונים</h3>
+          <div class="sub">סוכן מזין ת.ז דרך ערוץ כניסה</div>
+        </div>
+      </div>
+      <div class="node-detail">
+        <div class="detail-inner">
+          <div class="detail-section">
+            <h4>ערוצי כניסה</h4>
+            <div class="func-item"><div class="func-dot" style="background:#2563eb;"></div><div class="text"><strong>מכירות אונליין</strong> — ממשק ראשי לסוכנים (פיילוט)</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#2563eb;"></div><div class="text"><strong>הפורמלי</strong> — מערכת סוכנים קיימת</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#2563eb;"></div><div class="text"><strong>אלמגור</strong> — מערכת סוכנים חיצונית</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#2563eb;"></div><div class="text"><strong>מיילים</strong> — בקשות הצטרפות</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#2563eb;"></div><div class="text"><strong>לקוחות ישירים</strong> — עתידי</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lane system-lane"><div class="empty-cell"></div></div>
+
+  <!-- Arrow: data flows to system -->
+  <div class="cross-arrow to-system">
+    <div class="arrow-line">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+      ת.ז → שאיבת נתונים מיידית
+    </div>
+  </div>
+
+  <!-- ======== ROW 2: Product Selection (user) + Profile (system) ======== -->
+  <div class="lane user-lane">
+    <div class="node" onclick="toggle(this)">
+      <div class="node-head">
+        <div class="node-icon" style="background:linear-gradient(135deg,#f59e0b,#d97706);">P</div>
+        <div class="node-info">
+          <h3>בחירת מוצר</h3>
+          <div class="sub">ריסק למשכנתא / אור-1</div>
+        </div>
+      </div>
+      <div class="node-detail">
+        <div class="detail-inner">
+          <div class="detail-section">
+            <h4>מוצרים בפיילוט</h4>
+            <div class="func-item"><div class="func-dot" style="background:#f59e0b;"></div><div class="text"><strong>ביטוח ריסק למשכנתא</strong> — כיסוי חיים צמוד ליתרת הלוואה</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#f59e0b;"></div><div class="text"><strong>אור-1</strong> — ביטוח חיים עצמאי (ריסק)</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lane system-lane">
+    <div class="node system-node" onclick="toggle(this)">
+      <div class="node-head">
+        <div class="node-icon" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);">CP</div>
+        <div class="node-info">
+          <h3><span class="dev-badge">לפיתוח</span>פרופיל לקוח</h3>
+          <div class="sub">זיהוי + שאיבה + העשרה — מיידי</div>
+        </div>
+      </div>
+      <div class="node-detail">
+        <div class="detail-inner">
+          <div class="detail-section">
+            <h4>שאיבה מיידית</h4>
+            <div class="func-item"><div class="func-dot" style="background:#8b5cf6;"></div><div class="text"><strong>MDM</strong> — גיל, מין, מצב משפחתי, כתובת, עיר</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#8b5cf6;"></div><div class="text"><strong>מערכות ליבה</strong> — היסטוריית מוצרים, פוליסות קיימות</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#8b5cf6;"></div><div class="text"><strong>Image</strong> — מסמכים קיימים שהועלו בעבר</div></div>
+          </div>
+          <div class="detail-section">
+            <h4>העשרת פרופיל</h4>
+            <div class="func-item"><div class="func-dot" style="background:#7c3aed;"></div><div class="text"><strong>תביעות קודמות</strong> — סוג, תאריך, סטטוס ותוצאה</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#7c3aed;"></div><div class="text"><strong>פוליסות חא"ט</strong> — חיים, אובדן כושר, סיעוד + הצהרות קודמות</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#7c3aed;"></div><div class="text"><strong>פוליסות אלמנטר</strong> — רכב, דירה, צד ג' + אירועים</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#7c3aed;"></div><div class="text"><strong>אירועים רפואיים</strong> — ניתוחים, אשפוזים, מחלות כרוניות</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== ROW 3: Questionnaire (user) ======== -->
+  <div class="lane user-lane">
+    <div class="v-connector"><svg viewBox="0 0 20 28"><path d="M10 0 L10 20 L5 15 M10 20 L15 15" fill="none" stroke="#94a3b8" stroke-width="2"/></svg></div>
+    <div class="node" onclick="toggle(this)">
+      <div class="node-head">
+        <div class="node-icon" style="background:linear-gradient(135deg,#f59e0b,#ea580c);">QE</div>
+        <div class="node-info">
+          <h3>שאלון הצהרת בריאות</h3>
+          <div class="sub">שאלון דטרמיניסטי + מסמכים + חתימה</div>
+        </div>
+      </div>
+      <div class="node-detail">
+        <div class="detail-inner">
+          <div class="detail-section">
+            <h4>פונקציונליות</h4>
+            <div class="func-item"><div class="func-dot" style="background:#f59e0b;"></div><div class="text"><strong>שאלון דטרמיניסטי</strong> — שאלות קבועות לפי מוצר</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#f59e0b;"></div><div class="text"><strong>שאלוני המשך</strong> — נפתחים דינמית לפי תשובות</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#f59e0b;"></div><div class="text"><strong>העלאת מסמכים</strong> — הסוכן מעלה בשם הלקוח</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#f59e0b;"></div><div class="text"><strong>חתימה דיגיטלית</strong> — אישור ההצהרה</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lane system-lane">
+    <div class="empty-cell" style="min-height:40px;"></div>
+  </div>
+
+  <!-- Arrow: declaration submitted to system -->
+  <div class="cross-arrow to-system">
+    <div class="arrow-line">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+      הצהרה הושלמה → הצלבה אוטומטית מול הפרופיל
+    </div>
+  </div>
+
+  <!-- ======== ROW 4: Empty user + Missing & Completeness (system) ======== -->
+  <div class="lane user-lane"><div class="empty-cell"></div></div>
+  <div class="lane system-lane">
+    <div class="node system-node" onclick="toggle(this)">
+      <div class="node-head">
+        <div class="node-icon" style="background:linear-gradient(135deg,#22c55e,#059669);">MC</div>
+        <div class="node-info">
+          <h3><span class="dev-badge">לפיתוח</span>Missing & Completeness</h3>
+          <div class="sub">הצלבה + OCR + שלמות מסמכים</div>
+        </div>
+      </div>
+      <div class="node-detail">
+        <div class="detail-inner">
+          <div class="detail-section">
+            <h4>הצלבה — 5 תרחישים</h4>
+            <div class="scenario-mini" style="background:#f0fdf4;border-color:#86efac;">
+              <strong><span class="num" style="background:#22c55e;">1</span> <span style="color:#15803d;">נקי + נקי</span></strong>
+              <span style="color:#166534;">→ הפקה אוטומטית ל-BPR</span>
+            </div>
+            <div class="scenario-mini" style="background:#fef2f2;border-color:#fca5a5;">
+              <strong><span class="num" style="background:#ef4444;">2</span> <span style="color:#991b1b;">נקי + פרופיל מצא בעיה</span></strong>
+              <span style="color:#991b1b;">→ עצירה + דרישת מסמכים + חתם</span>
+            </div>
+            <div class="scenario-mini" style="background:#eff6ff;border-color:#93c5fd;">
+              <strong><span class="num" style="background:#3b82f6;">3</span> <span style="color:#1e3a5f;">בעיה + מאשר</span></strong>
+              <span style="color:#1e3a5f;">→ הפקה אוטומטית — הצהיר אמת</span>
+            </div>
+            <div class="scenario-mini" style="background:#fffbeb;border-color:#fcd34d;">
+              <strong><span class="num" style="background:#f59e0b;">4</span> <span style="color:#92400e;">בעיה + פרופיל נקי</span></strong>
+              <span style="color:#92400e;">→ חיווי לסוכן + הפקה/חתם</span>
+            </div>
+            <div class="scenario-mini" style="background:#fdf4ff;border-color:#e879f9;">
+              <strong><span class="num" style="background:#ec4899;">5</span> <span style="color:#9d174d;">בעיה X + פרופיל מצא Y</span></strong>
+              <span style="color:#9d174d;">→ עצירה + מסמכים לשתיהן + חתם</span>
+            </div>
+          </div>
+          <div class="detail-section">
+            <h4>עיבוד מסמכים (OCR)</h4>
+            <div class="func-item"><div class="func-dot" style="background:#22c55e;"></div><div class="text"><strong>OCR</strong> — קריאה אוטומטית של טקסט</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#22c55e;"></div><div class="text"><strong>סיווג</strong> — זיהוי סוג מסמך (רפואי, ת.ז, אישור)</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#22c55e;"></div><div class="text"><strong>חילוץ</strong> — אבחנות, תאריכים, תרופות</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#22c55e;"></div><div class="text"><strong>Validation</strong> — אימות תקינות ושלמות</div></div>
+          </div>
+          <div class="detail-section">
+            <h4>בדיקת שלמות</h4>
+            <div class="func-item"><div class="func-dot" style="background:#059669;"></div><div class="text"><strong>רשימת חוסרים</strong> — לפי רשימת מסמכים נדרשים מוגדרת מראש</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#059669;"></div><div class="text"><strong>בקשת השלמה</strong> — הודעה לסוכן על מסמכים חסרים</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#059669;"></div><div class="text"><strong>מעקב סטטוס</strong> — עד שהכל מלא</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Arrow: feedback to user -->
+  <div class="cross-arrow to-user">
+    <div class="arrow-line">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5m7-7l-7 7 7 7"/></svg>
+      פידבק לסוכן — חוסרים / חיווי / דרישת מסמכים
+    </div>
+  </div>
+
+  <!-- ======== ROW 5: User feedback + upload ======== -->
+  <div class="lane user-lane">
+    <div class="node" onclick="toggle(this)">
+      <div class="node-head">
+        <div class="node-icon" style="background:linear-gradient(135deg,#06b6d4,#0891b2);">FB</div>
+        <div class="node-info">
+          <h3>קבלת פידבק + השלמה</h3>
+          <div class="sub">הסוכן מעלה מסמכים חסרים / מתקן</div>
+        </div>
+      </div>
+      <div class="node-detail">
+        <div class="detail-inner">
+          <div class="detail-section">
+            <h4>פעולות הסוכן</h4>
+            <div class="func-item"><div class="func-dot" style="background:#06b6d4;"></div><div class="text"><strong>צפייה בחוסרים</strong> — רשימת מסמכים שנדרשים</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#06b6d4;"></div><div class="text"><strong>העלאת מסמכים</strong> — השלמת חוסרים</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#06b6d4;"></div><div class="text"><strong>הודעות</strong> — חיווי על חוסר הלימה בהצהרה</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#06b6d4;"></div><div class="text"><strong>סטטוס</strong> — מעקב אחרי התהליך</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lane system-lane"><div class="empty-cell"></div></div>
+
+  <!-- Arrow: docs go back to system -->
+  <div class="cross-arrow to-system">
+    <div class="arrow-line">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7l7 7-7 7"/></svg>
+      מסמכים הושלמו → בדיקת שלמות מחדש
+    </div>
+  </div>
+
+  <!-- Section divider -->
+  <div class="section-divider"><span>הכל מלא — ממשיכים למנוע ההחלטה</span></div>
+
+  <!-- ======== ROW 6: Decision Engine (system) ======== -->
+  <div class="lane user-lane"><div class="empty-cell"></div></div>
+  <div class="lane system-lane">
+    <div class="node system-node" onclick="toggle(this)">
+      <div class="node-head">
+        <div class="node-icon" style="background:linear-gradient(135deg,#f59e0b,#dc2626);">DE</div>
+        <div class="node-info">
+          <h3><span class="dev-badge">לפיתוח</span>Decision Engine</h3>
+          <div class="sub">הפקה / חתם — לפי אקטואריה + מבטח משנה</div>
+        </div>
+      </div>
+      <div class="node-detail">
+        <div class="detail-inner">
+          <div class="detail-section">
+            <h4>יכולות</h4>
+            <div class="func-item"><div class="func-dot" style="background:#f59e0b;"></div><div class="text"><strong>הפקת פוליסה + הצעת מחיר</strong> — אקטואריה + מדיניות מבטח משנה</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#22c55e;"></div><div class="text"><strong>הפקה בתנאים רגילים</strong> — ללא ממצא חריג</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#f59e0b;"></div><div class="text"><strong>הפקה עם חריגים</strong> — חריגים על כיסויים מסוימים</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#ef4444;"></div><div class="text"><strong>הפקה עם תוספת מחיר</strong> — היסטוריה רפואית</div></div>
+            <div class="func-item"><div class="func-dot" style="background:#8b5cf6;"></div><div class="text"><strong>העברה לחתם</strong> — כשלא ניתן לקבל החלטה אוטומטית</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Routing label -->
+  <div class="section-divider"><span>ניתוב לפי תוצאת ההחלטה</span></div>
+
+  <!-- ======== ROW 7: Outputs ======== -->
+  <div class="output-row">
+    <div class="output-card" onclick="toggleOut(this)">
+      <div class="o-icon" style="background:linear-gradient(135deg,#1e3a5f,#2563eb);">BPR</div>
+      <h3>BPR — הפקה אוטומטית</h3>
+      <div class="o-sub">מסלול ירוק — ללא התערבות אנושית</div>
+      <div class="o-detail">
+        <ul>
+          <li><span style="position:absolute;right:0;top:9px;width:5px;height:5px;border-radius:50%;background:#2563eb;"></span>הפקת פוליסה אוטומטית</li>
+          <li><span style="position:absolute;right:0;top:9px;width:5px;height:5px;border-radius:50%;background:#2563eb;"></span>הצעת מחיר אקטוארית</li>
+          <li><span style="position:absolute;right:0;top:9px;width:5px;height:5px;border-radius:50%;background:#2563eb;"></span>שליחת פוליסה ללקוח/סוכן</li>
+          <li><span style="position:absolute;right:0;top:9px;width:5px;height:5px;border-radius:50%;background:#2563eb;"></span>עדכון מערכות ליבה</li>
+        </ul>
+      </div>
+    </div>
+    <div class="output-card" onclick="toggleOut(this)">
+      <div class="o-icon" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);">UW</div>
+      <h3><span class="dev-badge">לפיתוח</span>Underwriter Workbench</h3>
+      <div class="o-sub">ממשק חתם — מערכת נפרדת מבוססת רכיבי Procise</div>
+      <div class="o-detail">
+        <ul>
+          <li><span style="position:absolute;right:0;top:9px;width:5px;height:5px;border-radius:50%;background:#8b5cf6;"></span>סיכום פרופיל לקוח מלא</li>
+          <li><span style="position:absolute;right:0;top:9px;width:5px;height:5px;border-radius:50%;background:#8b5cf6;"></span>צפייה בכל המסמכים</li>
+          <li><span style="position:absolute;right:0;top:9px;width:5px;height:5px;border-radius:50%;background:#22c55e;"></span>הפקה רגילה</li>
+          <li><span style="position:absolute;right:0;top:9px;width:5px;height:5px;border-radius:50%;background:#f59e0b;"></span>הפקה עם חריגים</li>
+          <li><span style="position:absolute;right:0;top:9px;width:5px;height:5px;border-radius:50%;background:#f59e0b;"></span>הפקה עם תוספת מחיר</li>
+          <li><span style="position:absolute;right:0;top:9px;width:5px;height:5px;border-radius:50%;background:#ef4444;"></span>דחיית הפוליסה</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div style="text-align:center;padding:20px;color:#94a3b8;font-size:11px;border-top:1px solid #e2e8f0;">
+  מגדל ביטוח — Procise Underwriting Flow — Pilot: Risk (Mortgage + Or-1)
+</div>
+
+<script>
+function toggle(el) { el.classList.toggle('active'); }
+function toggleOut(el) { el.classList.toggle('active'); }
+</script>
+</body>
+</html>
